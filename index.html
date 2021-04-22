@@ -1,0 +1,53 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+    <script>
+      const screenDim = 600
+      let corners = [{x: 300, y: 100}, {x: 100, y: 450}, {x: 500, y: 450}]
+      let pts = [{x: corners[0].x, y: (corners[0].y + corners[1].y) / 2}]
+      let num = 1
+      let numField, numLbl
+      function setup() {
+          createCanvas(screenDim,screenDim);
+          frameRate(20)
+            
+          numField = createInput(num)
+          numField.position(screenDim + 100, 100)
+          numField.size(50)
+          numField.input(inpEvent)
+          numLbl = createP("# of Points:")
+          numLbl.position(screenDim + 15, 85)
+        
+          drawScreen()
+      }
+      function inpEvent() {
+          pts = []
+          num = this.value()
+          pts.push({x: corners[0].x, y: (corners[0].y + corners[1].y) / 2})
+          let randInd
+          for(let i = 1; i < num; i++) {
+              randInd = floor(random(0, 3))
+              pts.push({
+                  x: (pts[i - 1].x + corners[randInd].x) / 2,
+                  y: (pts[i - 1].y + corners[randInd].y) / 2
+              })
+          }
+  
+          drawScreen()
+      }
+      function drawScreen() {
+          clear()
+          fill(250);
+          square(0,0, screenDim)
+          fill("black")
+          corners.forEach((pt) => {
+             ellipse(pt.x, pt.y, 10)
+          })
+          fill("blue")
+          pts.forEach((pt, index) => {
+              setTimeout(() => {
+                  ellipse(pt.x, pt.y, 5)
+              }, (5000 / num) * index)
+          })
+      }
+  </script>
+  </head>
